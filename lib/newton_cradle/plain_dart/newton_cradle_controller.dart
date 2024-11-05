@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:math' show pi;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 import 'package:soundpool/soundpool.dart';
 
 import '../_index.dart';
@@ -15,6 +17,10 @@ class NewtonCradleController {
   Soundpool? soundpool;
   int? soundId;
   SimulationControls controls;
+  StreamSubscription<GyroscopeEvent>? _gyroSubscription;
+  double _gyroX = 0.0;
+  double _gyroY = 0.0;
+  final bool _isGyroEnabled = true;
 
   NewtonCradleController({
     required this.vsync,
@@ -34,6 +40,8 @@ class NewtonCradleController {
         onUpdate();
       });
     animationController.repeat();
+
+    _initGyroscope();
   }
 
   Future<void> _initSound() async {
@@ -51,6 +59,15 @@ class NewtonCradleController {
     } catch (e) {
       debugPrint('Error initializing sound: $e');
     }
+  }
+
+  void _initGyroscope() {
+    _gyroSubscription = gyroscopeEvents.listen((GyroscopeEvent event) {
+      if (_isGyroEnabled) {
+        _gyroX = _gyroX * 0.8 + event.x * 0.2;
+        _gyroY = _gyroY * 0.8 + event.y * 0.2;
+      }
+    });
   }
 
   void updateBalls(BuildContext context) {
@@ -85,15 +102,29 @@ class NewtonCradleController {
   }
 
   void update() {
-    const double dt =
-        0.016 * 2.0; // Doubled time step for even faster simulation
+    const double dt = 0.016 * 2.0;
 
-    // Update ball positions
-    for (var ball in balls) {
-      ball.update(dt);
+    // Calculate gyroscope influence with adjusted sensitivity for portrait mode
+    double gravityX = _gyroY * 3.0; // Side-to-side tilt
+
+    // Use normal gravity when there's no significant gyro movement
+    if (_gyroX.abs() < 0.1) {
+      // Normal pendulum physics
+      for (var ball in balls) {
+        ball.update(dt);
+      }
+    } else {
+      // Modified gravity for portrait orientation
+      double gravityY = 9.81 - (_gyroX * 3.0); // Forward/backward tilt
+      // Subtract to match tilt direction
+
+      for (var ball in balls) {
+        if (!ball.isDragging) {
+          ball.updateWithGravity(dt, gravityX, gravityY);
+        }
+      }
     }
 
-    // Handle collisions
     _handleCollisions();
   }
 
@@ -140,6 +171,7 @@ class NewtonCradleController {
   }
 
   void dispose() {
+    _gyroSubscription?.cancel();
     animationController.dispose();
     soundpool?.dispose();
   }

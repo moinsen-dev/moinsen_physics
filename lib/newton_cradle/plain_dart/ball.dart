@@ -76,4 +76,37 @@ class Ball {
     double pe = gravity * length * (1 - cos(angle));
     return ke + pe;
   }
+
+  void updateWithGravity(double dt, double gravityX, double gravityY) {
+    if (!isDragging) {
+      // Calculate forces including lateral movement
+      final double dx = position.dx - origin.dx;
+      final double dy = position.dy - origin.dy;
+      final double currentLength = (position - origin).distance;
+
+      // Calculate tension force to maintain rope length
+      final double tensionMagnitude = (currentLength - length) * 100.0;
+      final double tensionX = -dx / currentLength * tensionMagnitude;
+      final double tensionY = -dy / currentLength * tensionMagnitude;
+
+      // Apply gravity and tension forces
+      double accelerationX = (gravityX + tensionX) / length;
+      double accelerationY = (gravityY + tensionY) / length;
+
+      // Update velocity
+      angularVelocity += accelerationX * dt;
+
+      // Apply damping
+      angularVelocity *= damping;
+
+      // Update position
+      position = Offset(
+        position.dx + angularVelocity * dt * length,
+        origin.dy + length * cos(angle),
+      );
+
+      // Update angle based on new position
+      angle = atan2(position.dx - origin.dx, position.dy - origin.dy);
+    }
+  }
 }

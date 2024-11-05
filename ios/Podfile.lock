@@ -1,20 +1,26 @@
 PODS:
   - Flutter (1.0.0)
+  - sensors_plus (0.0.1):
+    - Flutter
   - soundpool (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
   - soundpool (from `.symlinks/plugins/soundpool/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  sensors_plus:
+    :path: ".symlinks/plugins/sensors_plus/ios"
   soundpool:
     :path: ".symlinks/plugins/soundpool/ios"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  sensors_plus: 7229095999f30740798f0eeef5cd120357a8f4f2
   soundpool: c7f4422ca206e77f8900ed3c4ee6a6ff5a0e38a9
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
