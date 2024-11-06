@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import '../_index.dart';
 
 class NewtonCradleWidget extends StatefulWidget {
-  const NewtonCradleWidget({super.key});
+  final bool showControls;
+  const NewtonCradleWidget({
+    super.key,
+    this.showControls = false,
+  });
 
   @override
   NewtonCradleWidgetState createState() => NewtonCradleWidgetState();
@@ -20,6 +24,7 @@ class NewtonCradleWidgetState extends State<NewtonCradleWidget>
   @override
   void initState() {
     super.initState();
+
     controller = NewtonCradleController(
       vsync: this,
       onUpdate: () {

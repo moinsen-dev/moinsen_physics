@@ -8,19 +8,20 @@ class MoinsenPhysicsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      home: const AppSplashScreen(),
     );
   }
 }
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class AppSplashScreen extends StatefulWidget {
+  const AppSplashScreen({super.key});
 
   @override
-  SplashScreenState createState() => SplashScreenState();
+  AppSplashScreenState createState() => AppSplashScreenState();
 }
 
-class SplashScreenState extends State<SplashScreen> {
+class AppSplashScreenState extends State<AppSplashScreen> {
   bool _showSplash = true;
 
   @override
@@ -35,9 +36,6 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    debugPrint('Screen size: ${MediaQuery.of(context).size}');
-
     return Scaffold(
       body: Stack(
         fit: StackFit.expand, // Make sure Stack fills the screen
@@ -47,35 +45,11 @@ class SplashScreenState extends State<SplashScreen> {
             child: IgnorePointer(
               ignoring:
                   _showSplash, // Only ignore gestures when splash is showing
-              child: const NewtonCradleWidget(),
+              child: const NewtonCradleWidget(showControls: true),
             ),
           ),
           // Splash screen layer
-          if (_showSplash)
-            Positioned.fill(
-              child: Container(
-                color: Colors.white,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/splash.png',
-                        width: screenWidth * 0.8,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Moinsen Physics',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          if (_showSplash) const SplashScreen(),
         ],
       ),
     );

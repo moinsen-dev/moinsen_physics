@@ -3,8 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
-import 'ball_body.dart';
 import '../controls/simulation_controls.dart';
+import 'ball_body.dart';
 
 class NewtonCradleGame extends Forge2DGame {
   SimulationControls controls;
@@ -51,8 +51,6 @@ class NewtonCradleGame extends Forge2DGame {
 
   Future<void> _createCradle() async {
     try {
-      debugPrint('Creating cradle...');
-
       // Clean up existing bodies
       for (final ball in balls) {
         world.destroyBody(ball.body);
@@ -66,8 +64,6 @@ class NewtonCradleGame extends Forge2DGame {
 
       _createSupportBar();
       await _createBalls();
-
-      debugPrint('Cradle creation complete');
     } catch (e, stackTrace) {
       debugPrint('Error creating cradle: $e');
       debugPrint('Stack trace: $stackTrace');

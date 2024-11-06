@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'dart:math' show pi;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sensors_plus/sensors_plus.dart';
 import 'package:soundpool/soundpool.dart';
 
 import '../_index.dart';
@@ -11,22 +12,25 @@ import '../_index.dart';
 class NewtonCradleController {
   final TickerProvider vsync;
   final VoidCallback onUpdate;
-  late AnimationController animationController;
+  AnimationController? animationController;
   List<Ball> balls = [];
   late double originY;
   Soundpool? soundpool;
   int? soundId;
   SimulationControls controls;
-  StreamSubscription<GyroscopeEvent>? _gyroSubscription;
-  double _gyroX = 0.0;
-  double _gyroY = 0.0;
-  final bool _isGyroEnabled = true;
+
+  final double _gyroX = 0.0;
+  final double _gyroY = 0.0;
 
   NewtonCradleController({
     required this.vsync,
     required this.onUpdate,
     required this.controls,
   }) {
+    if (kIsWeb || Platform.environment.containsKey('FLUTTER_TEST')) {
+      return;
+    }
+
     _initializeController();
     _initSound();
   }
@@ -39,9 +43,7 @@ class NewtonCradleController {
         update();
         onUpdate();
       });
-    animationController.repeat();
-
-    _initGyroscope();
+    animationController!.repeat();
   }
 
   Future<void> _initSound() async {
@@ -59,15 +61,6 @@ class NewtonCradleController {
     } catch (e) {
       debugPrint('Error initializing sound: $e');
     }
-  }
-
-  void _initGyroscope() {
-    _gyroSubscription = gyroscopeEvents.listen((GyroscopeEvent event) {
-      if (_isGyroEnabled) {
-        _gyroX = _gyroX * 0.8 + event.x * 0.2;
-        _gyroY = _gyroY * 0.8 + event.y * 0.2;
-      }
-    });
   }
 
   void updateBalls(BuildContext context) {
@@ -171,8 +164,7 @@ class NewtonCradleController {
   }
 
   void dispose() {
-    _gyroSubscription?.cancel();
-    animationController.dispose();
+    animationController?.dispose();
     soundpool?.dispose();
   }
 }
