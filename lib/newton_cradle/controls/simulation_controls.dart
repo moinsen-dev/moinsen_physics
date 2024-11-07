@@ -14,6 +14,7 @@ class SimulationControls {
   final bool isSoundEnabled;
   final double soundVolume;
   final CradleVersion version;
+  final bool useRubberBands;
 
   const SimulationControls({
     required this.numberOfBalls,
@@ -24,6 +25,7 @@ class SimulationControls {
     required this.isSoundEnabled,
     required this.soundVolume,
     required this.version,
+    required this.useRubberBands,
   });
 
   SimulationControls copyWith({
@@ -35,6 +37,7 @@ class SimulationControls {
     bool? isSoundEnabled,
     double? soundVolume,
     CradleVersion? version,
+    bool? useRubberBands,
   }) {
     return SimulationControls(
       numberOfBalls: numberOfBalls ?? this.numberOfBalls,
@@ -45,6 +48,7 @@ class SimulationControls {
       isSoundEnabled: isSoundEnabled ?? this.isSoundEnabled,
       soundVolume: soundVolume ?? this.soundVolume,
       version: version ?? this.version,
+      useRubberBands: useRubberBands ?? this.useRubberBands,
     );
   }
 
@@ -57,5 +61,6 @@ class SimulationControls {
     isSoundEnabled: true,
     soundVolume: 0.5,
     version: CradleVersion.classic,
+    useRubberBands: false,
   );
 }

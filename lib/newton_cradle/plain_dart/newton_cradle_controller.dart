@@ -4,7 +4,7 @@ import 'dart:math' show log;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:flutter/services.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:logger/logger.dart';
 
@@ -19,9 +19,6 @@ class NewtonCradleController {
   FlutterSoundPlayer? _soundPlayer;
   int? soundId;
   SimulationControls controls;
-
-  final double _gyroX = 0.0;
-  final double _gyroY = 0.0;
 
   ByteData? _soundData;
 
@@ -54,11 +51,44 @@ class NewtonCradleController {
       _soundPlayer = FlutterSoundPlayer();
       _soundPlayer!.setLogLevel(Level.off);
       await _soundPlayer!.openPlayer();
-
-      // Load sound data once during initialization
       _soundData = await rootBundle.load('assets/sounds/click.wav');
     } catch (e) {
       debugPrint('Error initializing sound: $e');
+    }
+  }
+
+  void update() {
+    const double dt = 0.016 * 2.0;
+
+    // Update positions
+    for (var ball in balls) {
+      ball.update(dt);
+    }
+
+    // Check for collisions
+    for (int i = 0; i < balls.length - 1; i++) {
+      Ball ball1 = balls[i];
+      Ball ball2 = balls[i + 1];
+
+      if (ball1.isColliding(ball2, controls.ballRadius)) {
+        if (!ball1.isDragging && !ball2.isDragging) {
+          double v1 = ball1.getLinearVelocity();
+          double v2 = ball2.getLinearVelocity();
+
+          // Only transfer momentum if balls are moving towards each other
+          if (v1 > v2) {
+            // Exchange velocities for perfect elastic collision
+            ball1.applyImpulse(v2 - v1);
+            ball2.applyImpulse(v1 - v2);
+
+            // Play sound if collision is significant
+            double relativeVelocity = (v1 - v2).abs();
+            if (relativeVelocity > 0.1) {
+              _playCollisionSound(relativeVelocity);
+            }
+          }
+        }
+      }
     }
   }
 
@@ -72,79 +102,57 @@ class NewtonCradleController {
 
     balls.clear();
 
-    // Create new balls with exact spacing
     for (int i = 0; i < controls.numberOfBalls; i++) {
       final xPos = startX + i * controls.ballRadius * 2.0;
-      final ball = Ball(
-        index: i,
-        origin: Offset(xPos, originY),
-        position: Offset(
-          xPos,
-          originY + controls.ropeLength,
-        ),
-        length: controls.ropeLength,
+      final ballPosition = Offset(
+        xPos,
+        originY + controls.ropeLength,
       );
+
+      final ball = controls.useRubberBands
+          ? RubberBandBall(
+              index: i,
+              origin: Offset(xPos, originY),
+              position: ballPosition,
+              length: controls.ropeLength,
+            )
+          : PendulumBall(
+              index: i,
+              origin: Offset(xPos, originY),
+              position: ballPosition,
+              length: controls.ropeLength,
+            );
+
       balls.add(ball);
     }
-
-    // Remove initial pull back of first ball
-    // The simulation will now start with balls at rest
-    // if (balls.isNotEmpty) {
-    //   balls.first.setAngle(-pi / 4); // 45 degrees
-    // }
   }
 
-  void update() {
-    const double dt = 0.016 * 2.0;
+  void handlePanStart(DragStartDetails details, Size size) {
+    final touchPoint = details.localPosition;
 
-    // Calculate gyroscope influence with adjusted sensitivity for portrait mode
-    double gravityX = _gyroY * 3.0; // Side-to-side tilt
-
-    // Use normal gravity when there's no significant gyro movement
-    if (_gyroX.abs() < 0.1) {
-      // Normal pendulum physics
-      for (var ball in balls) {
-        ball.update(dt);
-      }
-    } else {
-      // Modified gravity for portrait orientation
-      double gravityY = 9.81 - (_gyroX * 3.0); // Forward/backward tilt
-      // Subtract to match tilt direction
-
-      for (var ball in balls) {
-        if (!ball.isDragging) {
-          ball.updateWithGravity(dt, gravityX, gravityY);
-        }
+    for (var ball in balls) {
+      final distance = (touchPoint - ball.position).distance;
+      if (distance <= controls.ballRadius) {
+        ball.startDragging(touchPoint);
+        break;
       }
     }
-
-    _handleCollisions();
   }
 
-  void _handleCollisions() {
-    for (int i = 0; i < balls.length - 1; i++) {
-      Ball ball1 = balls[i];
-      Ball ball2 = balls[i + 1];
+  void handlePanUpdate(DragUpdateDetails details) {
+    for (var ball in balls) {
+      if (ball.isDragging) {
+        ball.updateDragPosition(details.localPosition);
+        break;
+      }
+    }
+  }
 
-      if (ball1.isColliding(ball2, controls.ballRadius)) {
-        if (!ball1.isDragging && !ball2.isDragging) {
-          // Perfect elastic collision for Newton's Cradle
-          double v1 = ball1.getLinearVelocity();
-          double v2 = ball2.getLinearVelocity();
-
-          // Only transfer momentum if balls are moving towards each other
-          if (v1 > v2) {
-            // Exchange velocities for perfect elastic collision
-            ball1.applyImpulse(v2);
-            ball2.applyImpulse(v1);
-
-            // Play sound if collision is significant
-            double relativeVelocity = (v1 - v2).abs();
-            if (relativeVelocity > 0.1) {
-              _playCollisionSound(relativeVelocity);
-            }
-          }
-        }
+  void handlePanEnd(DragEndDetails details) {
+    for (var ball in balls) {
+      if (ball.isDragging) {
+        ball.endDragging();
+        break;
       }
     }
   }
@@ -156,12 +164,7 @@ class NewtonCradleController {
         _soundData == null) return;
 
     try {
-      // Adjust pitch based on velocity (smaller range for more natural sound)
       final double rate = 1.0 + (velocity * 0.1).clamp(-0.1, 0.1);
-
-      // Calculate volume based on collision force
-      // Map velocity to a reasonable volume range (0.1 to 1.0)
-      // Using log scale for more natural sound perception
       final double volume =
           (0.1 + 0.9 * (log(1 + velocity) / log(5))).clamp(0.1, 1.0);
 

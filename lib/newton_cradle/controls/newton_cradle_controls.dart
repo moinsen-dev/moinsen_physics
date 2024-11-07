@@ -65,23 +65,13 @@ class NewtonCradleControlsWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    const Text('Version'),
-                    const SizedBox(width: 16),
-                    SegmentedButton<CradleVersion>(
-                      segments: const [
-                        ButtonSegment(
-                          value: CradleVersion.classic,
-                          label: Text('Classic'),
-                        ),
-                        ButtonSegment(
-                          value: CradleVersion.physics,
-                          label: Text('Physics'),
-                        ),
-                      ],
-                      selected: {controls.version},
-                      onSelectionChanged: (Set<CradleVersion> selection) {
+                    const Text('Use Rubber Bands'),
+                    const Spacer(),
+                    Switch(
+                      value: controls.useRubberBands,
+                      onChanged: (value) {
                         onControlsChanged(
-                          controls.copyWith(version: selection.first),
+                          controls.copyWith(useRubberBands: value),
                         );
                       },
                     ),

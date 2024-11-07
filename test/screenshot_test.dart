@@ -83,11 +83,14 @@ void main() {
         name: 'splash',
       ),
       ScreenshotTest(
-        widget: const NewtonCradleWidget(showControls: false),
+        widget: const NewtonCradlePlainDart(
+            controls: SimulationControls.defaultControls),
         name: 'newton_cradle',
       ),
       ScreenshotTest(
-        widget: const NewtonCradleWidget(showControls: true),
+        widget: const NewtonCradlePlainDart(
+          controls: SimulationControls.defaultControls,
+        ),
         name: 'newton_cradle_controls',
       ),
     ];

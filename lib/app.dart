@@ -45,7 +45,9 @@ class AppSplashScreenState extends State<AppSplashScreen> {
             child: IgnorePointer(
               ignoring:
                   _showSplash, // Only ignore gestures when splash is showing
-              child: const NewtonCradleWidget(showControls: true),
+              child: const NewtonCradlePlainDart(
+                controls: SimulationControls.defaultControls,
+              ),
             ),
           ),
           // Splash screen layer

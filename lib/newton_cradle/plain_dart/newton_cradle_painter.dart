@@ -2,19 +2,21 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import 'ball.dart';
+import '_index.dart';
 
 class NewtonCradlePainter extends CustomPainter {
   final List<Ball> balls;
   final double ballRadius;
   final Color ballColor;
   final double ballWeight;
+  final bool useRubberBands;
 
   const NewtonCradlePainter({
     required this.balls,
     required this.ballRadius,
     required this.ballColor,
     required this.ballWeight,
+    required this.useRubberBands,
   });
 
   @override
@@ -49,10 +51,56 @@ class NewtonCradlePainter extends CustomPainter {
   }
 
   void _drawString(Canvas canvas, Ball ball) {
-    final stringPaint = Paint()
-      ..color = Colors.grey[600]!
-      ..strokeWidth = 1.0;
-    canvas.drawLine(ball.origin, ball.position, stringPaint);
+    if (useRubberBands) {
+      _drawRubberBand(canvas, ball);
+    } else {
+      final stringPaint = Paint()
+        ..color = Colors.grey[600]!
+        ..strokeWidth = 1.0;
+      canvas.drawLine(ball.origin, ball.position, stringPaint);
+    }
+  }
+
+  void _drawRubberBand(Canvas canvas, Ball ball) {
+    final rubberPaint = Paint()
+      ..color = Colors.black.withOpacity(0.6)
+      ..strokeWidth = 3.0
+      ..style = PaintingStyle.stroke;
+
+    // Calculate the control points for the bezier curve
+    final dx = ball.position.dx - ball.origin.dx;
+    final dy = ball.position.dy - ball.origin.dy;
+    final midPoint = Offset(
+      ball.origin.dx + dx * 0.5,
+      ball.origin.dy + dy * 0.5,
+    );
+
+    // Add some waviness based on stretch
+    final stretch = (ball.position - ball.origin).distance / ball.length;
+    final waveMagnitude = (stretch - 1.0).clamp(0.0, 0.5) * 20.0;
+
+    final controlPoint1 = Offset(
+      midPoint.dx - waveMagnitude,
+      midPoint.dy,
+    );
+
+    final controlPoint2 = Offset(
+      midPoint.dx + waveMagnitude,
+      midPoint.dy,
+    );
+
+    final path = Path()
+      ..moveTo(ball.origin.dx, ball.origin.dy)
+      ..cubicTo(
+        controlPoint1.dx,
+        controlPoint1.dy,
+        controlPoint2.dx,
+        controlPoint2.dy,
+        ball.position.dx,
+        ball.position.dy,
+      );
+
+    canvas.drawPath(path, rubberPaint);
   }
 
   void _drawBall(Canvas canvas, Ball ball) {
