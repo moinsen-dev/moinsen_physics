@@ -103,7 +103,7 @@ class NewtonCradleControlsWidget extends StatelessWidget {
                 label: 'Ball Size',
                 value: controls.ballRadius,
                 min: 10,
-                max: 30,
+                max: 100,
                 onChanged: (value) {
                   onControlsChanged(controls.copyWith(ballRadius: value));
                 },

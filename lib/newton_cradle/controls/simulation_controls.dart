@@ -50,7 +50,7 @@ class SimulationControls {
 
   static const defaultControls = SimulationControls(
     numberOfBalls: 5,
-    ballRadius: 15.0,
+    ballRadius: 30.0,
     ropeLength: 200.0,
     ballColor: Colors.grey,
     ballWeightGrams: 100.0,

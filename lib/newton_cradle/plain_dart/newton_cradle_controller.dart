@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'dart:math' show pi;
+import 'dart:math' show log;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:soundpool/soundpool.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:logger/logger.dart';
 
 import '../_index.dart';
 
@@ -15,12 +16,14 @@ class NewtonCradleController {
   AnimationController? animationController;
   List<Ball> balls = [];
   late double originY;
-  Soundpool? soundpool;
+  FlutterSoundPlayer? _soundPlayer;
   int? soundId;
   SimulationControls controls;
 
   final double _gyroX = 0.0;
   final double _gyroY = 0.0;
+
+  ByteData? _soundData;
 
   NewtonCradleController({
     required this.vsync,
@@ -48,16 +51,12 @@ class NewtonCradleController {
 
   Future<void> _initSound() async {
     try {
-      soundpool = Soundpool.fromOptions(
-        options: SoundpoolOptions(
-          streamType: StreamType.notification,
-          maxStreams: 4,
-        ),
-      );
+      _soundPlayer = FlutterSoundPlayer();
+      _soundPlayer!.setLogLevel(Level.off);
+      await _soundPlayer!.openPlayer();
 
-      soundId = await rootBundle
-          .load('assets/sounds/click.wav')
-          .then((ByteData data) => soundpool!.load(data));
+      // Load sound data once during initialization
+      _soundData = await rootBundle.load('assets/sounds/click.wav');
     } catch (e) {
       debugPrint('Error initializing sound: $e');
     }
@@ -88,10 +87,11 @@ class NewtonCradleController {
       balls.add(ball);
     }
 
-    // Initial condition: pull first ball back
-    if (balls.isNotEmpty) {
-      balls.first.setAngle(-pi / 4); // 45 degrees
-    }
+    // Remove initial pull back of first ball
+    // The simulation will now start with balls at rest
+    // if (balls.isNotEmpty) {
+    //   balls.first.setAngle(-pi / 4); // 45 degrees
+    // }
   }
 
   void update() {
@@ -150,14 +150,27 @@ class NewtonCradleController {
   }
 
   void _playCollisionSound(double velocity) async {
-    if (!controls.isSoundEnabled || soundId == null || soundId! <= 0) return;
+    if (!controls.isSoundEnabled ||
+        _soundPlayer == null ||
+        !_soundPlayer!.isOpen() ||
+        _soundData == null) return;
 
     try {
-      final double rate = 1.0 + (velocity * 0.2).clamp(-0.2, 0.2);
-      final double volume = (velocity.abs() * 0.5).clamp(0.1, 1.0);
+      // Adjust pitch based on velocity (smaller range for more natural sound)
+      final double rate = 1.0 + (velocity * 0.1).clamp(-0.1, 0.1);
 
-      soundpool?.setVolume(soundId: soundId!, volume: volume);
-      await soundpool?.play(soundId!, rate: rate);
+      // Calculate volume based on collision force
+      // Map velocity to a reasonable volume range (0.1 to 1.0)
+      // Using log scale for more natural sound perception
+      final double volume =
+          (0.1 + 0.9 * (log(1 + velocity) / log(5))).clamp(0.1, 1.0);
+
+      _soundPlayer!.setVolume(volume);
+      _soundPlayer!.setSpeed(rate);
+
+      await _soundPlayer!.startPlayer(
+        fromDataBuffer: _soundData!.buffer.asUint8List(),
+      );
     } catch (e) {
       debugPrint('Error playing sound: $e');
     }
@@ -165,6 +178,6 @@ class NewtonCradleController {
 
   void dispose() {
     animationController?.dispose();
-    soundpool?.dispose();
+    _soundPlayer?.closePlayer();
   }
 }

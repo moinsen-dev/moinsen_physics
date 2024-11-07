@@ -14,7 +14,7 @@ class Ball {
 
   // Significantly increased physics constants for much faster motion
   final double gravity = 39.24; // 4x normal gravity
-  final double damping = 0.9995; // Very slight damping
+  final double damping = 0.995; // Increased damping for faster energy loss
 
   Ball({
     required this.index,
