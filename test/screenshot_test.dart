@@ -35,27 +35,21 @@ const devices = {
     density: 2.0,
     isAndroid: true,
   ),
-  'ipad_pro_2': DeviceConfig(
-    size: Size(2048, 2732),
-    name: 'ipad_pro_2',
-    density: 2.0,
-    isAndroid: false,
-  ),
   'ipad_pro_6': DeviceConfig(
     size: Size(2048, 2732),
     name: 'IPAD_PRO_3GEN_129', // Special name for App Store
     density: 2.0,
     isAndroid: false,
   ),
-  'iphone_8_plus': DeviceConfig(
-    size: Size(1242, 2208),
-    name: 'iphone_8_plus',
+  'iphone_65_inch': DeviceConfig(
+    size: Size(1242, 2688),
+    name: 'iphone_65_inch',
     density: 3.0,
     isAndroid: false,
   ),
-  'iphone_xs_max': DeviceConfig(
-    size: Size(1242, 2688),
-    name: 'iphone_xs_max',
+  'iphone_69_inch': DeviceConfig(
+    size: Size(1320, 2868),
+    name: 'iphone_69_inch',
     density: 3.0,
     isAndroid: false,
   ),
@@ -117,6 +111,7 @@ void main() {
             );
             debugPrint('screenFile: $screenFile');
 
+/*
             if (screenFile.existsSync()) {
               final decoratedWidget = await _createDecoratedScreenshot(
                 screenFile,
@@ -137,6 +132,7 @@ void main() {
               // Clean up the initial screenshot
               screenFile.deleteSync();
             }
+            */
           }
         });
       }
