@@ -1,9 +1,9 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_sound (9.16.3):
+  - flutter_sound (9.28.0):
     - Flutter
-    - flutter_sound_core (= 9.16.3)
-  - flutter_sound_core (9.16.3)
+    - flutter_sound_core (= 9.28.0)
+  - flutter_sound_core (9.28.0)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -32,11 +32,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_sound: d9c7b35b2f19366439a74695d190d9a504a6b4fe
-  flutter_sound_core: 2c5d7e93183845b53a776d99c4d6ebc2933ec495
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  flutter_sound: b9236a5875299aaa4cef1690afd2f01d52a3f890
+  flutter_sound_core: 427465f72d07ab8c3edbe8ffdde709ddacd3763c
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: d713b6b659a24d596f461d32412ab1f8a1a74182
 
 COCOAPODS: 1.16.2
