@@ -4,7 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Moinsen Physics** is a Flutter-based physics simulation app featuring a Newton's Cradle implementation. The project uniquely demonstrates dual physics approaches: pure Dart calculations and the Forge2D physics engine.
+**Gravity Lab** (transforming from Moinsen Physics) is a Flutter-based physics puzzle game where players manipulate gravity to solve challenging puzzles. The game features realistic physics simulation using Forge2D, creative level design across 6 themed worlds, and a clean architecture approach.
+
+## Design Documentation
+
+Comprehensive design documents are available in `docs/design/`:
+- `gravity-lab-feature-spec.md` - Complete game design document
+- `ui-ux-design.md` - Visual design, color schemes, and UI patterns
+- `level-design-guide.md` - Level creation principles and mechanics
+- `tutorial-system-design.md` - Progressive learning system
+- `world-themes-design.md` - Detailed world and level progression
+- `physics-system-design.md` - Core physics implementation details
+- `monetization-strategy.md` - Revenue model and pricing
+- `technical-architecture.md` - Clean architecture implementation
 
 ## Development Commands
 
@@ -22,104 +34,165 @@ flutter build ios                # iOS release
 flutter build web                # Web release
 
 # Testing
-flutter test                     # Run all tests
+flutter test                      # Run all tests
 flutter test test/screenshot_test.dart --update-goldens  # Update golden files
 ```
 
 ## Architecture
 
-### Dual Physics Implementation
-The app implements Newton's Cradle using two distinct approaches:
+### Clean Architecture Structure
+The project follows clean architecture principles with clear separation of concerns:
 
-1. **Pure Dart** (`lib/newton_cradle/plain_dart/`): Custom physics with manual collision detection
-2. **Forge2D** (`lib/newton_cradle/forge2d/`): Box2D physics engine integration
+```
+lib/
+├── core/                    # Shared utilities and constants
+│   ├── physics/            # Physics constants and helpers
+│   ├── theme/              # App theming and colors
+│   └── utils/              # Common utilities
+├── data/                   # Data layer
+│   ├── repositories/       # Data repositories
+│   └── models/            # Data models
+├── domain/                 # Business logic
+│   ├── entities/          # Core entities
+│   ├── repositories/      # Repository interfaces
+│   └── use_cases/         # Business logic
+├── presentation/           # UI layer
+│   ├── screens/           # Screen widgets
+│   ├── widgets/           # Reusable widgets
+│   └── providers/         # State management
+└── features/              # Feature modules
+    ├── game_engine/       # Flame/Forge2D integration
+    ├── level_editor/      # Level creation tools
+    └── tutorial/          # Tutorial system
+```
 
 ### Key Components
-- **Controllers**: Physics simulation logic in `newton_cradle_controller.dart`
-- **Game Engine**: Flame-based implementation in `newton_cradle_game.dart`
-- **UI Controls**: Simulation parameters in `controls/simulation_controls.dart`
-- **Sound System**: Velocity-based audio feedback with platform-specific handling
+- **Game Engine**: Flame + Forge2D for physics simulation
+- **State Management**: Riverpod for app state
+- **Audio System**: Flutter Sound with dynamic collision-based effects
+- **Level System**: JSON-based level definitions with physics parameters
+- **Visual Effects**: Particle systems and animations
 
 ### Dependencies
-- **Flame + Forge2D**: Game engine and physics
-- **Riverpod**: State management
-- **Flutter Sound**: Audio with collision-based dynamics
-- **Golden Toolkit**: Screenshot testing framework
+- **Game Engine**: `flame` + `flame_forge2d` for physics
+- **State**: `flutter_riverpod` for state management
+- **Audio**: `flutter_sound` with permission handling
+- **Testing**: `golden_toolkit` for visual regression
+- **Analytics**: `firebase_analytics` (future implementation)
 
-## Testing Setup
+## Game Development Guidelines
+
+### Physics Implementation
+- **Forge2D Integration**: Use Box2D physics for realistic simulation
+- **Gravity System**: 8-directional gravity with smooth transitions
+- **Object Types**: Standard, Heavy, Light, Bouncy, Sticky, Fragile, Magnetic, Portal
+- **Performance**: Target 60 FPS with efficient collision detection
+
+### Level Design
+- **Structure**: JSON-based level definitions in `assets/levels/`
+- **Progression**: 6 worlds × 20 levels = 120 total levels
+- **Difficulty**: Progressive difficulty with star-based scoring
+- **Testing**: Each level must be completable within time limits
+
+### Visual Standards
+- **Theme**: Modern, clean with physics-inspired aesthetics
+- **Colors**: World-specific palettes (see `docs/design/ui-ux-design.md`)
+- **Animations**: Smooth transitions, particle effects for interactions
+- **Accessibility**: High contrast mode, colorblind-friendly options
+
+## Testing Strategy
+
+### Unit Tests
+- Physics calculations and gravity mechanics
+- Level loading and validation
+- Score calculation algorithms
+
+### Widget Tests
+- UI component behavior
+- Screen navigation flows
+- Control responsiveness
 
 ### Golden Tests
-Comprehensive screenshot testing across multiple device configurations:
-- Android: Smartphone, 7" tablet, 10" tablet
-- iOS: iPhone 6.5", iPhone 6.9", iPad Pro 12.9"
-- Test files: `test/screenshot_test.dart`, goldens in `test/goldens/`
+- Visual regression across devices:
+  - Android: Phone, 7" tablet, 10" tablet
+  - iOS: iPhone 6.5", 6.9", iPad Pro 12.9"
+- Run with: `flutter test test/screenshot_test.dart --update-goldens`
 
-### Sound Integration
-- Disabled for web and test environments
-- Asset-based (`assets/sounds/click.wav`)
-- Dynamic volume/pitch based on collision physics
-
-## Code Organization
-
-### Generated Exports
-Uses `_index.dart` files for clean module exports (generated by "Moinsen Flutter" tool).
-
-### Performance Features
-- 60 FPS animation controller
-- Efficient collision detection algorithms
-- Memory-conscious resource management
-- Platform-optimized rendering
+### Integration Tests
+- Full gameplay flow
+- Level completion mechanics
+- Save/load functionality
 
 ## Development Workflow
 
-### GitHub Integration
-- **Primary workflow**: GitHub Issues and Pull Requests
-- **GitHub CLI**: Use `gh` command for issue and PR management
-- **Current work**: Pull Request #2 - "feat: Initial setup for Gravity Lab transformation"
-  - Implementing comprehensive feature specification from `docs/gravity-lab-feature-spec.md`
-  - Transforming Moinsen Physics into Gravity Lab physics puzzle game
-  - Modern Flutter architecture with clean code principles
-  - **FREE GAME**: No monetization, no Firebase, no ads - pure physics puzzle experience
-
 ### Git Workflow
 - **Main branch**: `develop`
-- **Current feature branch**: `feat/game-design`
+- **Feature branches**: `feat/feature-name`
+- **Release branches**: `release/version`
+- **Hotfix branches**: `hotfix/issue-name`
 
-### GitHub Commands
+### GitHub Integration
 ```bash
-# View current PR
-gh pr view 2
+# Current work context
+gh pr view 2              # View current PR
 
-# Create new issue
-gh issue create --title "Feature Title" --body "Description"
+# Issue management
+gh issue create --title "Title" --body "Description"
+gh issue list --label "bug"
 
-# List issues
-gh issue list
-
-# Create PR from current branch
-gh pr create --title "PR Title" --body "Description"
-
-# Review PR status
+# PR workflow
+gh pr create --title "Title" --body "Description"
 gh pr status
 ```
 
-## Current Implementation Focus
+### Code Standards
+- **Exports**: Use `_index.dart` files for clean module exports
+- **Naming**: Follow Flutter conventions (lowerCamelCase, UpperCamelCase)
+- **Documentation**: Document complex physics calculations
+- **Performance**: Profile regularly, optimize draw calls
 
-### Feature Specification
-Follow the comprehensive feature spec in `docs/gravity-lab-feature-spec.md` which outlines:
-- **Game Concept**: Physics puzzle game with gravity manipulation
-- **6 Themed Worlds**: Newton's Lab, Zero-G Station, Aqua Depths, Magnetic Factory, Time Nexus, Quantum Realm
-- **Core Mechanics**: 8-directional gravity control, 8 object types, interactive elements
-- **Clean Architecture**: Domain/Data/Presentation layers with feature modules
-- **Advanced Physics**: Forge2D integration, particle effects, collision systems
+## Performance Optimization
 
-### Implementation Phases
-1. **Phase 1 (MVP)**: Core physics engine, 20 tutorial levels, basic UI
-2. **Phase 2**: All 5 worlds (100 levels), progression system, visual polish
-3. **Phase 3**: Level editor, community features, advanced mechanics
+### Key Metrics
+- **Target FPS**: 60 on all supported devices
+- **Load Time**: < 3 seconds for app start
+- **Level Load**: < 500ms per level
+- **Memory**: < 150MB runtime usage
 
-### Key Design Principles
-- **Free Game**: No monetization, ads, or Firebase
-- **Physics-First**: Realistic gravity manipulation and object interactions  
-- **Visual Delight**: Particle effects, smooth animations, modern UI
-- **Accessibility**: High contrast options, multiple control schemes
+### Optimization Strategies
+- Efficient sprite batching
+- Object pooling for particles
+- Lazy loading of world assets
+- Physics body sleeping for inactive objects
+
+## Monetization Implementation
+
+### Revenue Streams
+- **Ads**: Rewarded videos for hints/retries
+- **IAP**: Hint packs, world unlocks, cosmetics
+- **Season Pass**: Monthly content updates
+- **Remove Ads**: One-time purchase option
+
+### Implementation Notes
+- Use `in_app_purchase` package for IAP
+- `google_mobile_ads` for ad integration
+- Server validation for purchases
+- Offline play capability maintained
+
+## Current Development Status
+
+### Completed
+- Basic project structure
+- Core physics engine setup
+- Initial UI framework
+
+### In Progress (PR #2)
+- Clean architecture implementation
+- Game engine integration
+- Level system foundation
+
+### Upcoming
+- Tutorial system implementation
+- First world levels (Newton's Lab)
+- Visual polish and effects
+- Sound system enhancement
