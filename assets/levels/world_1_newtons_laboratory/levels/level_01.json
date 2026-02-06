@@ -1,0 +1,78 @@
+{
+  "name": "First Contact",
+  "description": "Learn to manipulate gravity and guide the ball to the goal",
+  "difficulty": "tutorial",
+  "objects": [
+    {
+      "type": "ball",
+      "position": {"x": 100, "y": 100},
+      "rotation": 0,
+      "properties": {
+        "radius": 1.5,
+        "color": "#4CAF50"
+      },
+      "spawnDelay": 0
+    },
+    {
+      "type": "cube",
+      "position": {"x": 200, "y": 300},
+      "rotation": 0.785,
+      "properties": {
+        "size": 3.0
+      },
+      "spawnDelay": 1.0
+    }
+  ],
+  "victoryConditions": [
+    {
+      "type": "reach_goal",
+      "position": {"x": 300, "y": 400},
+      "radius": 30,
+      "requiredObject": "ball"
+    }
+  ],
+  "physicsConfig": {
+    "gravity": {"x": 0, "y": 9.81},
+    "timeScale": 1.0,
+    "bounciness": 0.6,
+    "friction": 0.3,
+    "allowQuantumEffects": false,
+    "allowTimeManipulation": true,
+    "allowGravityPainting": false
+  },
+  "visualTheme": {
+    "backgroundType": "laboratory",
+    "colors": ["#2196F3", "#03A9F4", "#00BCD4"],
+    "particleTheme": "steam",
+    "ambientIntensity": 0.8,
+    "specialEffects": ["lens_flare", "dust_particles"]
+  },
+  "timeLimit": {
+    "gold": 10,
+    "silver": 15,
+    "bronze": 20
+  },
+  "powerUps": [
+    {
+      "type": "slow_time",
+      "name": "Time Dilation",
+      "description": "Slow down time for 10 seconds",
+      "duration": 10,
+      "effects": {
+        "timeScale": 0.5
+      }
+    }
+  ],
+  "metadata": {
+    "tutorialSteps": [
+      "Tap the GRAVITY button to change gravity direction",
+      "Guide the green ball to the glowing goal area",
+      "Use TIME REWIND if you make a mistake"
+    ],
+    "hints": [
+      "Try changing gravity to move the ball sideways",
+      "The cube can be used as a platform",
+      "Experiment with different gravity angles"
+    ]
+  }
+}

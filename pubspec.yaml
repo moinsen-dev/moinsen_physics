@@ -1,11 +1,11 @@
 name: moinsen_physics
-description: Just a simple physics game
+description: Gravity Lab - A physics puzzle game where you manipulate gravity to solve challenges
 repository: https://github.com/moinsen-dev/moinsen_physics
-version: 0.3.0
+version: 1.0.0+1
 
 environment:
-  sdk: 3.8.0
-  flutter: 3.3.2
+  sdk: '>=3.8.0 <4.0.0'
+  flutter: '>=3.3.2'
 
 dependencies:
   flutter:
@@ -37,3 +37,4 @@ flutter:
     - assets/
     - assets/images/
     - assets/sounds/
+    - assets/levels/

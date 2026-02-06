@@ -1,0 +1,334 @@
+{
+  "worlds": [
+    {
+      "id": 1,
+      "name": "Newton's Laboratory",
+      "description": "Master the basics of gravity manipulation",
+      "theme": "classical",
+      "levelCount": 20,
+      "features": [
+        "Basic gravity control",
+        "Introduction to physics objects",
+        "Time manipulation tutorial"
+      ],
+      "visuals": {
+        "primaryColor": "#2196F3",
+        "secondaryColor": "#03A9F4",
+        "accentColor": "#00BCD4",
+        "backgroundAsset": "newton_lab.jpg",
+        "musicTrack": "classical_physics.mp3",
+        "particleEffects": ["steam", "gears"],
+        "objectSkins": {
+          "ball": "classical_ball",
+          "cube": "wooden_cube"
+        },
+        "lighting": {
+          "ambientColor": "#FFFFFF",
+          "ambientIntensity": 0.8,
+          "lights": [
+            {
+              "position": {"x": 0, "y": -10},
+              "color": "#FFEB3B",
+              "intensity": 1.0,
+              "radius": 20,
+              "type": "point"
+            }
+          ],
+          "enableShadows": true,
+          "enableBloom": true
+        }
+      },
+      "unlockRequirement": {
+        "type": "stars",
+        "count": 0
+      }
+    },
+    {
+      "id": 2,
+      "name": "Zero-G Station",
+      "description": "Navigate the mysteries of weightlessness",
+      "theme": "space",
+      "levelCount": 20,
+      "features": [
+        "Zero gravity puzzles",
+        "Orbital mechanics",
+        "Asteroid fields"
+      ],
+      "visuals": {
+        "primaryColor": "#9C27B0",
+        "secondaryColor": "#673AB7",
+        "accentColor": "#E91E63",
+        "backgroundAsset": "space_station.jpg",
+        "musicTrack": "zero_gravity.mp3",
+        "particleEffects": ["stars", "nebula"],
+        "objectSkins": {
+          "ball": "space_sphere",
+          "cube": "metal_cube"
+        },
+        "lighting": {
+          "ambientColor": "#1A237E",
+          "ambientIntensity": 0.4,
+          "lights": [
+            {
+              "position": {"x": -20, "y": -20},
+              "color": "#FFFFFF",
+              "intensity": 0.8,
+              "radius": 30,
+              "type": "directional"
+            }
+          ],
+          "enableShadows": true,
+          "enableBloom": true
+        }
+      },
+      "unlockRequirement": {
+        "type": "previous_world",
+        "worldId": 1,
+        "completion": 0.8
+      }
+    },
+    {
+      "id": 3,
+      "name": "Quantum Realm",
+      "description": "Where reality bends and possibilities multiply",
+      "theme": "quantum",
+      "levelCount": 20,
+      "features": [
+        "Quantum superposition",
+        "Probability waves",
+        "Parallel realities"
+      ],
+      "visuals": {
+        "primaryColor": "#4CAF50",
+        "secondaryColor": "#009688",
+        "accentColor": "#8BC34A",
+        "backgroundAsset": "quantum_realm.jpg",
+        "musicTrack": "quantum_mechanics.mp3",
+        "particleEffects": ["quantum_foam", "probability_waves"],
+        "objectSkins": {
+          "ball": "quantum_sphere",
+          "cube": "probability_cube"
+        },
+        "lighting": {
+          "ambientColor": "#00E676",
+          "ambientIntensity": 0.6,
+          "lights": [],
+          "enableShadows": false,
+          "enableBloom": true
+        }
+      },
+      "unlockRequirement": {
+        "type": "composite",
+        "requirements": [
+          {
+            "type": "previous_world",
+            "worldId": 2,
+            "completion": 0.6
+          },
+          {
+            "type": "stars",
+            "count": 60
+          }
+        ],
+        "requireAll": true
+      },
+      "bossInfo": {
+        "name": "Schrödinger's Cat",
+        "description": "A paradoxical feline that exists in multiple states",
+        "spriteAsset": "schrodinger_cat.png",
+        "abilities": [
+          "Phase shift",
+          "Probability manipulation",
+          "Quantum tunneling"
+        ],
+        "battleConfig": {
+          "health": 1000,
+          "phases": 3
+        }
+      }
+    },
+    {
+      "id": 4,
+      "name": "Time Laboratory",
+      "description": "Control the flow of time itself",
+      "theme": "temporal",
+      "levelCount": 20,
+      "features": [
+        "Time dilation",
+        "Temporal loops",
+        "Causality puzzles"
+      ],
+      "visuals": {
+        "primaryColor": "#FF9800",
+        "secondaryColor": "#FF5722",
+        "accentColor": "#FFC107",
+        "backgroundAsset": "time_lab.jpg",
+        "musicTrack": "temporal_flux.mp3",
+        "particleEffects": ["clock_gears", "time_streams"],
+        "objectSkins": {
+          "ball": "chronosphere",
+          "cube": "time_cube"
+        },
+        "lighting": {
+          "ambientColor": "#FFB300",
+          "ambientIntensity": 0.7,
+          "lights": [
+            {
+              "position": {"x": 0, "y": 0},
+              "color": "#FFEB3B",
+              "intensity": 1.5,
+              "radius": 40,
+              "type": "spot"
+            }
+          ],
+          "enableShadows": true,
+          "enableBloom": true
+        }
+      },
+      "unlockRequirement": {
+        "type": "boss",
+        "worldId": 3
+      }
+    },
+    {
+      "id": 5,
+      "name": "Magnetic Fields",
+      "description": "Harness the power of attraction and repulsion",
+      "theme": "magnetic",
+      "levelCount": 20,
+      "features": [
+        "Magnetic forces",
+        "Polarity switching",
+        "Electromagnetic puzzles"
+      ],
+      "visuals": {
+        "primaryColor": "#F44336",
+        "secondaryColor": "#E91E63",
+        "accentColor": "#FF5252",
+        "backgroundAsset": "magnetic_field.jpg",
+        "musicTrack": "electromagnetic.mp3",
+        "particleEffects": ["magnetic_lines", "electric_sparks"],
+        "objectSkins": {
+          "ball": "magnetic_sphere",
+          "cube": "ferromagnetic_cube"
+        },
+        "lighting": {
+          "ambientColor": "#D50000",
+          "ambientIntensity": 0.5,
+          "lights": [
+            {
+              "position": {"x": 10, "y": 10},
+              "color": "#FF1744",
+              "intensity": 1.2,
+              "radius": 25,
+              "type": "point"
+            },
+            {
+              "position": {"x": -10, "y": -10},
+              "color": "#1E88E5",
+              "intensity": 1.2,
+              "radius": 25,
+              "type": "point"
+            }
+          ],
+          "enableShadows": true,
+          "enableBloom": true
+        }
+      },
+      "unlockRequirement": {
+        "type": "composite",
+        "requirements": [
+          {
+            "type": "previous_world",
+            "worldId": 4,
+            "completion": 0.7
+          },
+          {
+            "type": "stars",
+            "count": 120
+          }
+        ],
+        "requireAll": false
+      },
+      "bossInfo": {
+        "name": "Magneto Prime",
+        "description": "Master of magnetic forces and electromagnetic storms",
+        "spriteAsset": "magneto_prime.png",
+        "abilities": [
+          "Magnetic pulse",
+          "Polarity reversal",
+          "EMP blast",
+          "Metal storm"
+        ],
+        "battleConfig": {
+          "health": 1500,
+          "phases": 4,
+          "resistances": ["energy", "magnetic"]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "name": "Chaos Dimension",
+      "description": "The ultimate test of physics mastery",
+      "theme": "chaos",
+      "levelCount": 20,
+      "features": [
+        "Unpredictable physics",
+        "Reality distortions",
+        "Ultimate challenges"
+      ],
+      "visuals": {
+        "primaryColor": "#6A1B9A",
+        "secondaryColor": "#311B92",
+        "accentColor": "#AA00FF",
+        "backgroundAsset": "chaos_dimension.jpg",
+        "musicTrack": "chaos_theory.mp3",
+        "particleEffects": ["chaos_storm", "reality_tears", "void_particles"],
+        "objectSkins": {
+          "ball": "chaos_orb",
+          "cube": "void_cube"
+        },
+        "lighting": {
+          "ambientColor": "#6200EA",
+          "ambientIntensity": 0.3,
+          "lights": [],
+          "enableShadows": false,
+          "enableBloom": true
+        }
+      },
+      "unlockRequirement": {
+        "type": "composite",
+        "requirements": [
+          {
+            "type": "boss",
+            "worldId": 5
+          },
+          {
+            "type": "stars",
+            "count": 150
+          }
+        ],
+        "requireAll": true
+      },
+      "bossInfo": {
+        "name": "The Entropy Lord",
+        "description": "Embodiment of chaos and destroyer of order",
+        "spriteAsset": "entropy_lord.png",
+        "abilities": [
+          "Reality warp",
+          "Chaos cascade",
+          "Dimensional rift",
+          "Entropy beam",
+          "Time fracture"
+        ],
+        "battleConfig": {
+          "health": 2000,
+          "phases": 5,
+          "randomPhysics": true,
+          "immunities": ["time", "gravity"]
+        }
+      }
+    }
+  ]
+}
