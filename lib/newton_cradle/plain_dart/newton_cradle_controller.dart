@@ -36,13 +36,14 @@ class NewtonCradleController {
   }
 
   void _initializeController() {
-    animationController = AnimationController(
-      vsync: vsync,
-      duration: const Duration(milliseconds: 16),
-    )..addListener(() {
-        update();
-        onUpdate();
-      });
+    animationController =
+        AnimationController(
+          vsync: vsync,
+          duration: const Duration(milliseconds: 16),
+        )..addListener(() {
+          update();
+          onUpdate();
+        });
     animationController!.repeat();
   }
 
@@ -104,10 +105,7 @@ class NewtonCradleController {
 
     for (int i = 0; i < controls.numberOfBalls; i++) {
       final xPos = startX + i * controls.ballRadius * 2.0;
-      final ballPosition = Offset(
-        xPos,
-        originY + controls.ropeLength,
-      );
+      final ballPosition = Offset(xPos, originY + controls.ropeLength);
 
       final ball = controls.useRubberBands
           ? RubberBandBall(
@@ -161,12 +159,16 @@ class NewtonCradleController {
     if (!controls.isSoundEnabled ||
         _soundPlayer == null ||
         !_soundPlayer!.isOpen() ||
-        _soundData == null) return;
+        _soundData == null) {
+      return;
+    }
 
     try {
       final double rate = 1.0 + (velocity * 0.1).clamp(-0.1, 0.1);
-      final double volume =
-          (0.1 + 0.9 * (log(1 + velocity) / log(5))).clamp(0.1, 1.0);
+      final double volume = (0.1 + 0.9 * (log(1 + velocity) / log(5))).clamp(
+        0.1,
+        1.0,
+      );
 
       _soundPlayer!.setVolume(volume);
       _soundPlayer!.setSpeed(rate);

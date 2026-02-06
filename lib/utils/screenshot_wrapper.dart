@@ -7,7 +7,7 @@ Widget getScreenWrapper({
   required Widget child,
   required Locale locale,
   required bool isAndroid,
-  List<Override> overrides = const [],
+  List<Object> overrides = const [],
 }) {
   // Create test controls with sound disabled if in test mode
 
