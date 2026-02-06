@@ -149,18 +149,18 @@ packages:
     dependency: "direct main"
     description:
       name: flame
-      sha256: "58566686ad9b7e6a3984c50a740fd733e0a5022d48263916f50b3c78e7f14ec0"
+      sha256: "6a98c1697bfe4669c604e4459cb01ca96559f464d3523f6af90a8956bf2080ee"
       url: "https://pub.dev"
     source: hosted
-    version: "1.29.0"
+    version: "1.35.0"
   flame_forge2d:
     dependency: "direct main"
     description:
       name: flame_forge2d
-      sha256: "2de549cd4afece82158daaef78486f023475028c061fa2d330e927f9e6efcaa4"
+      sha256: f6a6287b23ac9e103ee5ebf8e0c5a981322077c8003d3eb73b7291ebdd8c9cda
       url: "https://pub.dev"
     source: hosted
-    version: "0.19.0+2"
+    version: "0.19.2+3"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -175,10 +175,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_launcher_icons
-      sha256: bfa04787c85d80ecb3f8777bde5fc10c3de809240c48fa061a2c2bf15ea5211c
+      sha256: "10f13781741a2e3972126fae08393d3c4e01fa4cd7473326b94b72cf594195e7"
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.3"
+    version: "0.14.4"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -196,34 +196,34 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_riverpod
-      sha256: "9532ee6db4a943a1ed8383072a2e3eeda041db5657cdf6d2acecf3c21ecbe7e1"
+      sha256: e2026c72738a925a60db30258ff1f29974e40716749f3c9850aabf34ffc1a14c
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.1"
+    version: "3.2.1"
   flutter_sound:
     dependency: "direct main"
     description:
       name: flutter_sound
-      sha256: ef89477f6e8ce2fa395158ebc4a8b11982e3ada440b4021c06fd97a4e771554b
+      sha256: "77f0252a2f08449d621f68b8fd617c3b391e7f862eaa94bb32f53cc2dc3bbe85"
       url: "https://pub.dev"
     source: hosted
-    version: "9.28.0"
+    version: "9.30.0"
   flutter_sound_platform_interface:
     dependency: transitive
     description:
       name: flutter_sound_platform_interface
-      sha256: "3394d7e664a09796818014ff85a81db0dec397f4c286cbe52f8783886fa5a497"
+      sha256: "5ffc858fd96c6fa277e3bb25eecc100849d75a8792b1f9674d1ba817aea9f861"
       url: "https://pub.dev"
     source: hosted
-    version: "9.28.0"
+    version: "9.30.0"
   flutter_sound_web:
     dependency: transitive
     description:
       name: flutter_sound_web
-      sha256: "4e10c94a8574bd93bb8668af59bf76f5312a890bccd3778d73168a7133217dc5"
+      sha256: "3af46f45f44768c01c83ba260855c956d0963673664947926d942aa6fbf6f6fb"
       url: "https://pub.dev"
     source: hosted
-    version: "9.28.0"
+    version: "9.30.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -238,10 +238,10 @@ packages:
     dependency: transitive
     description:
       name: forge2d
-      sha256: c7d0f84bb75d16af41ab5168676d6df80f32a9890ccaf76857d90fe80bb6e7ff
+      sha256: "0f63d177f2e137a5007b879fda4076d0b81de065fcd72056c6fc896c82758bb7"
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.0"
+    version: "0.14.2+1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -363,10 +363,10 @@ packages:
     dependency: "direct main"
     description:
       name: logger
-      sha256: be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1
+      sha256: a7967e31b703831a893bbc3c3dd11db08126fe5f369b5c648a36f821979f5be3
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.2"
   logging:
     dependency: transitive
     description:
@@ -491,10 +491,10 @@ packages:
     dependency: "direct main"
     description:
       name: permission_handler
-      sha256: "2d070d8684b68efb580a5997eb62f675e8a885ef0be6e754fb9ef489c177470f"
+      sha256: bc917da36261b00137bbc8896bf1482169cd76f866282368948f032c8c1caae1
       url: "https://pub.dev"
     source: hosted
-    version: "12.0.0+1"
+    version: "12.0.1"
   permission_handler_android:
     dependency: transitive
     description:
@@ -595,10 +595,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      sha256: "59062512288d3056b2321804332a13ffdd1bf16df70dcc8e506e411280a72959"
+      sha256: "8c22216be8ad3ef2b44af3a329693558c98eca7b8bd4ef495c92db0bba279f83"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.1"
+    version: "3.2.1"
   shelf:
     dependency: transitive
     description:
@@ -776,10 +776,10 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: cd3543bd5798f6ad290ea73d210f423502e71900302dde696f8bff84bf89a1cb
+      sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   web_socket_channel:
     dependency: transitive
     description:
@@ -830,4 +830,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.8.0 <4.0.0"
-  flutter: ">=3.27.1"
+  flutter: ">=3.32.0"

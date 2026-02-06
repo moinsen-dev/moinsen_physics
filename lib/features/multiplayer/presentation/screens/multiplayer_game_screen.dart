@@ -485,7 +485,7 @@ class _MultiplayerGameScreenState extends State<MultiplayerGameScreen> {
 }
 
 /// Multiplayer game engine with networking
-class MultiplayerQuantumGame extends Forge2DGame with TapDetector, DragCallbacks {
+class MultiplayerQuantumGame extends Forge2DGame with TapCallbacks, DragCallbacks {
   final GameMode mode;
   final String roomId;
   final QuantumNetworkEngine networkEngine;

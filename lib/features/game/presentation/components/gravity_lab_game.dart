@@ -23,7 +23,7 @@ class GravityLabGame extends Forge2DGame
   
   // Game state
   late GravityController gravityController;
-  late GameStateManager stateManager;
+  final GameStateManager stateManager = GameStateManager();
   final List<BallObject> balls = [];
   final List<ObstacleObject> obstacles = [];
   final List<GoalObject> goals = [];
@@ -61,16 +61,16 @@ class GravityLabGame extends Forge2DGame
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    
+
+    // Position camera to show the full game area (0,0)-(400,600)
+    camera.viewfinder.position = Vector2(200, 300);
+
     // Initialize gravity controller
     gravityController = GravityController(
       initialGravity: world.gravity,
       onGravityChange: _handleGravityChange,
     );
     world.add(gravityController);
-    
-    // Initialize state manager
-    stateManager = GameStateManager();
     
     // Load level
     await _loadLevel();

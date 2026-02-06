@@ -38,69 +38,64 @@ class GameUI extends StatelessWidget {
             left: 16,
             right: 16,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Level info
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.7),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    level.displayName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      level.displayName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
-                
+
+                const SizedBox(width: 8),
+
                 // Stats
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.7),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Time
-                      Icon(Icons.timer, color: Colors.white, size: 20),
+                      Icon(Icons.timer, color: Colors.white70, size: 16),
                       const SizedBox(width: 4),
                       Text(
                         _formatTime(time),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      
-                      // Moves
-                      Icon(Icons.touch_app, color: Colors.white, size: 20),
+                      const SizedBox(width: 10),
+                      Icon(Icons.touch_app, color: Colors.white70, size: 16),
                       const SizedBox(width: 4),
                       Text(
                         '$moves',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 13,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          
-          // Control buttons
-          Positioned(
-            top: 16,
-            right: 16,
-            child: Row(
-              children: [
+
+                const Spacer(),
+
                 // Restart button
                 _ControlButton(
                   icon: Icons.refresh,
@@ -110,7 +105,7 @@ class GameUI extends StatelessWidget {
                   },
                 ),
                 const SizedBox(width: 8),
-                
+
                 // Pause button
                 if (!isGameOver)
                   _ControlButton(
@@ -159,18 +154,22 @@ class GameUI extends StatelessWidget {
           
           // Gravity indicator
           Positioned(
-            bottom: 16,
+            bottom: 24,
             left: 16,
             child: Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: Colors.black.withValues(alpha: 0.7),
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.cyan.withValues(alpha: 0.5),
+                  width: 2,
+                ),
               ),
               child: Icon(
                 Icons.arrow_downward,
                 color: Colors.cyan,
-                size: 28,
+                size: 32,
               ),
             ),
           ),

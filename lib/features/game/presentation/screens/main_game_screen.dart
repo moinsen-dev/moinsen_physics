@@ -85,10 +85,14 @@ class _MainGameScreenState extends State<MainGameScreen>
   }
   
   void _onVictory(int stars, int moves, double time) {
-    setState(() {
-      _isVictory = true;
-      _isGameOver = true;
-      _stars = stars;
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() {
+        _isVictory = true;
+        _isGameOver = true;
+        _stars = stars;
+      });
     });
     
     // Victory effects
@@ -101,9 +105,13 @@ class _MainGameScreenState extends State<MainGameScreen>
   }
   
   void _onFailure() {
-    setState(() {
-      _isGameOver = true;
-      _isVictory = false;
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() {
+        _isGameOver = true;
+        _isVictory = false;
+      });
     });
     
     // Failure effects
@@ -121,17 +129,27 @@ class _MainGameScreenState extends State<MainGameScreen>
   }
   
   void _onMove() {
-    setState(() {
-      _moves++;
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _moves++;
+        });
+      }
     });
-    
+
     // Move feedback
     HapticManager.lightImpact();
   }
-  
+
   void _onTimeUpdate(double time) {
-    setState(() {
-      _timeElapsed = time;
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _timeElapsed = time;
+        });
+      }
     });
   }
   
@@ -298,7 +316,7 @@ class _MainGameScreenState extends State<MainGameScreen>
   Widget build(BuildContext context) {
     return PopScope(
       canPop: _isPaused || _isGameOver,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (!didPop && !_isPaused && !_isGameOver) {
           _pauseGame();
           _showPauseDialog();
@@ -351,22 +369,19 @@ class _MainGameScreenState extends State<MainGameScreen>
             // Undo/Redo controls
             if (!_isGameOver && !_isPaused)
               Positioned(
-                bottom: 80,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: UndoRedoControls(
-                    canUndo: game.canUndo,
-                    canRedo: game.canRedo,
-                    onUndo: () {
-                      game.undo();
-                      setState(() {});
-                    },
-                    onRedo: () {
-                      game.redo();
-                      setState(() {});
-                    },
-                  ),
+                bottom: 24,
+                right: 16,
+                child: UndoRedoControls(
+                  canUndo: game.canUndo,
+                  canRedo: game.canRedo,
+                  onUndo: () {
+                    game.undo();
+                    setState(() {});
+                  },
+                  onRedo: () {
+                    game.redo();
+                    setState(() {});
+                  },
                 ),
               ),
             
@@ -385,10 +400,12 @@ class _MainGameScreenState extends State<MainGameScreen>
                   if (tutorialController.isCompleted) {
                     game.enableInput();
                   }
+                  setState(() {});
                 },
                 onSkip: () {
                   tutorialController.skipTutorial();
                   game.enableInput();
+                  setState(() {});
                 },
               ),
             

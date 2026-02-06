@@ -33,8 +33,8 @@ class _LevelSelectionScreenState extends State<LevelSelectionScreen>
     
     // Create staggered animations for each level
     _levelAnimations = List.generate(20, (index) {
-      final start = index * 0.05;
-      final end = start + 0.3;
+      final start = (index * 0.05).clamp(0.0, 1.0);
+      final end = (start + 0.3).clamp(0.0, 1.0);
       
       return Tween<double>(
         begin: 0.0,

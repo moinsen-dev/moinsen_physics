@@ -23,10 +23,10 @@ Future<void> _initializeGame() async {
     overlays: [],
   );
   
-  // Lock to landscape for optimal physics gameplay
+  // Lock to portrait - game world is 400x600 (portrait ratio)
   await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
   ]);
   
   // Set dark status bar

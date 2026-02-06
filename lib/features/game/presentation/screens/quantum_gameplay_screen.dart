@@ -246,7 +246,7 @@ class _QuantumGameplayScreenState extends State<QuantumGameplayScreen> {
 }
 
 /// The revolutionary game engine
-class QuantumGravityGame extends Forge2DGame with TapDetector {
+class QuantumGravityGame extends Forge2DGame with TapCallbacks {
   late QuantumPhysicsEngine quantumEngine;
   bool isQuantumMode = false;
   bool isGravityPaintMode = false;
@@ -438,31 +438,31 @@ class QuantumGravityGame extends Forge2DGame with TapDetector {
   }
   
   @override
-  void onTapDown(TapDownInfo info) {
-    super.onTapDown(info);
-    
+  void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
+
     if (isGravityPaintMode) {
       // Create gravity field at tap location
       quantumEngine.paintGravityField(
-        info.eventPosition.global,
+        event.localPosition,
         50,
         Vector2(0, -20), // Anti-gravity field
       );
       
       // Visual effect
       add(UltraVisualEffects.createQuantumTrail(
-        position: info.eventPosition.global,
+        position: event.localPosition,
         color: Colors.green,
       ));
     } else if (isPortalMode) {
       if (firstPortal == null) {
         // Create first portal
-        firstPortal = PortalOrb(position: info.eventPosition.global);
+        firstPortal = PortalOrb(position: event.localPosition);
         add(firstPortal!);
         gameObjects.add(firstPortal!);
       } else {
         // Create second portal and link them
-        final secondPortal = PortalOrb(position: info.eventPosition.global);
+        final secondPortal = PortalOrb(position: event.localPosition);
         add(secondPortal);
         gameObjects.add(secondPortal);
         

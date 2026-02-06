@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../levels/presentation/screens/world_selection_screen.dart';
@@ -18,6 +17,7 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
   late AnimationController _titleController;
   late AnimationController _menuController;
   late AnimationController _particleController;
+  late AnimationController _pulseController;
   
   late Animation<double> _titleScale;
   late Animation<double> _titleGlow;
@@ -75,6 +75,12 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
       vsync: this,
     )..repeat();
     
+    // Pulse animation for PLAY button
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat(reverse: true);
+
     // Start animations
     _titleController.forward();
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -88,6 +94,7 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
     _titleController.dispose();
     _menuController.dispose();
     _particleController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
   
@@ -197,20 +204,11 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
                         offset: Offset(0, _menuSlide.value),
                         child: Column(
                           children: [
-                            _buildMenuButton(
-                              'PLAY',
-                              Colors.green,
-                              Icons.play_arrow,
-                              () => _navigateToGame(context),
-                              delay: 0,
-                            ),
+                            _buildPlayButton(context),
                             const SizedBox(height: 16),
-                            _buildMenuButton(
+                            _buildDisabledButton(
                               'COMING SOON',
-                              Colors.purple,
-                              Icons.rocket_launch,
-                              () => _showComingSoon(context),
-                              delay: 100,
+                              Icons.lock_outline,
                             ),
                           ],
                         ),
@@ -269,20 +267,16 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
     );
   }
   
-  Widget _buildMenuButton(
-    String text,
-    Color color,
-    IconData icon,
-    VoidCallback onPressed,
-    {int delay = 0}
-  ) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: Duration(milliseconds: 500 + delay),
-      curve: Curves.easeOutCubic,
-      builder: (context, value, child) {
+  Widget _buildPlayButton(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _pulseController,
+      builder: (context, child) {
+        final pulse = _pulseController.value;
+        final scale = 1.0 + pulse * 0.04;
+        final glowAlpha = 0.3 + pulse * 0.4;
+
         return Transform.scale(
-          scale: value,
+          scale: scale,
           child: Container(
             width: 280,
             height: 60,
@@ -291,20 +285,20 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  color.withValues(alpha: 0.3),
-                  color.withValues(alpha: 0.1),
+                  Colors.green.withValues(alpha: 0.4 + pulse * 0.2),
+                  Colors.green.withValues(alpha: 0.2),
                 ],
               ),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
-                color: color.withValues(alpha: 0.5),
+                color: Colors.greenAccent.withValues(alpha: 0.6 + pulse * 0.4),
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: color.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  spreadRadius: 2,
+                  color: Colors.greenAccent.withValues(alpha: glowAlpha),
+                  blurRadius: 20 + pulse * 15,
+                  spreadRadius: 2 + pulse * 4,
                 ),
               ],
             ),
@@ -314,26 +308,26 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
                 borderRadius: BorderRadius.circular(30),
                 onTap: () {
                   HapticFeedback.lightImpact();
-                  onPressed();
+                  _navigateToGame(context);
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     children: [
-                      Icon(icon, color: color, size: 28),
+                      Icon(Icons.play_arrow, color: Colors.greenAccent, size: 28),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Text(
-                          text,
+                          'PLAY',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
+                            letterSpacing: 4,
                           ),
                         ),
                       ),
-                      Icon(Icons.arrow_forward_ios, color: color, size: 20),
+                      Icon(Icons.arrow_forward_ios, color: Colors.greenAccent, size: 20),
                     ],
                   ),
                 ),
@@ -344,7 +338,45 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
       },
     );
   }
-  
+
+  Widget _buildDisabledButton(String text, IconData icon) {
+    return Opacity(
+      opacity: 0.35,
+      child: Container(
+        width: 280,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.15),
+            width: 1,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Row(
+            children: [
+              Icon(icon, color: Colors.white54, size: 22),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: Colors.white54,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 2,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _navigateToGame(BuildContext context) {
     Navigator.push(
       context,
@@ -372,77 +404,6 @@ class _QuantumMainMenuState extends State<QuantumMainMenu>
     );
   }
   
-  void _showComingSoon(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Dialog(
-          backgroundColor: Colors.black.withValues(alpha: 0.8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(
-              color: Colors.purple.withValues(alpha: 0.5),
-              width: 2,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.rocket_launch,
-                  color: Colors.purple,
-                  size: 48,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'COMING SOON',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'This revolutionary feature is being developed',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7),
-                    fontSize: 14,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.purple.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Colors.purple.withValues(alpha: 0.5),
-                      ),
-                    ),
-                    child: Text(
-                      'OK',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 /// Quantum background painter

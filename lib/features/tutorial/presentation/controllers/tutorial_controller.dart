@@ -100,7 +100,7 @@ class TutorialController extends ChangeNotifier {
   Future<bool> shouldShowTutorial() async {
     // TODO: Check SharedPreferences for completion status
     // For now, always show tutorial for level 1
-    return levelId == 'level_1' && !_isCompleted;
+    return levelId == 'world1_level1' && !_isCompleted;
   }
   
   void _saveTutorialCompletion() {

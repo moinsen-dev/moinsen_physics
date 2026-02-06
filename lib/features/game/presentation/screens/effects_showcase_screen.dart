@@ -177,7 +177,7 @@ class _EffectsShowcaseScreenState extends State<EffectsShowcaseScreen> {
 }
 
 /// Game engine showcasing all visual effects
-class EffectsShowcaseGame extends Forge2DGame with TapDetector, DragCallbacks {
+class EffectsShowcaseGame extends Forge2DGame with TapCallbacks, DragCallbacks {
   late QuantumPhysicsEngine quantumEngine;
   final List<QuantumGameObject> physicsObjects = [];
   final List<Component> effectComponents = [];
@@ -443,10 +443,10 @@ class EffectsShowcaseGame extends Forge2DGame with TapDetector, DragCallbacks {
   }
   
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent event) {
     // Create explosion at tap location
     add(UltraVisualEffects.createExplosion(
-      position: info.eventPosition.global,
+      position: event.localPosition,
       color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
       intensity: 1.5,
     ));

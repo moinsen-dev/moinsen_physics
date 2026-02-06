@@ -4,11 +4,11 @@ import '../domain/entities/tutorial_step.dart';
 /// Tutorial scripts for each level
 class TutorialScripts {
   static final Map<String, TutorialSequence> _tutorials = {
-    'level_1': _createLevel1Tutorial(),
-    'level_2': _createLevel2Tutorial(),
-    'level_3': _createLevel3Tutorial(),
-    'level_4': _createLevel4Tutorial(),
-    'level_5': _createLevel5Tutorial(),
+    'world1_level1': _createLevel1Tutorial(),
+    'world1_level2': _createLevel2Tutorial(),
+    'world1_level3': _createLevel3Tutorial(),
+    'world1_level4': _createLevel4Tutorial(),
+    'world1_level5': _createLevel5Tutorial(),
   };
   
   static TutorialSequence? getTutorialForLevel(String levelId) {
@@ -18,60 +18,47 @@ class TutorialScripts {
   /// Level 1: Basic gravity switching
   static TutorialSequence _createLevel1Tutorial() {
     return TutorialSequence(
-      levelId: 'level_1',
+      levelId: 'world1_level1',
       steps: [
         TutorialStep(
           id: 'welcome',
           title: 'Welcome to Gravity Lab!',
-          description: 'In this game, you control gravity to guide objects to their goals.',
+          description: 'Control gravity to guide the ball to the goal.',
           action: TutorialAction.showInfo,
-          canSkip: false,
-          autoProceedAfter: const Duration(seconds: 4),
         ),
         TutorialStep(
           id: 'objective',
           title: 'Your Objective',
-          description: 'Guide the green ball into the glowing goal area.',
-          action: TutorialAction.highlightArea,
-          highlightPosition: Vector2(300, 400), // Goal position
-          highlightRadius: 60,
+          description: 'Get the ball into the glowing green goal area.',
+          action: TutorialAction.showInfo,
         ),
         TutorialStep(
           id: 'gravity_control',
-          title: 'Gravity Control',
-          description: 'Tap the gravity buttons to change gravity direction.',
-          action: TutorialAction.highlightArea,
-          highlightPosition: Vector2(200, 600), // Gravity controls position
-          highlightRadius: 80,
+          title: 'How to Play',
+          description: 'Tap anywhere on the screen to change gravity direction. Gravity pulls toward where you tap.',
+          action: TutorialAction.showInfo,
         ),
         TutorialStep(
-          id: 'try_it',
-          title: 'Try It!',
-          description: 'Tap the DOWN arrow to make the ball fall.',
-          action: TutorialAction.showGhostHand,
-          highlightPosition: Vector2(200, 650), // Down button
-          validationCriteria: ['gravity_switched'],
+          id: 'undo',
+          title: 'Made a Mistake?',
+          description: 'Use the undo/redo buttons at the bottom right, or swipe left/right.',
+          action: TutorialAction.showInfo,
         ),
         TutorialStep(
-          id: 'success',
-          title: 'Great Job!',
-          description: 'Now guide the ball to the goal by switching gravity.',
-          action: TutorialAction.waitForAction,
-          validationCriteria: ['object_reached_goal'],
+          id: 'stars',
+          title: 'Earn Stars',
+          description: 'Fewer moves and faster times earn more stars. Good luck!',
+          action: TutorialAction.showInfo,
         ),
       ],
-      initialState: {
-        'gravity_switched': false,
-        'object_reached_goal': false,
-        'time_elapsed': 0.0,
-      },
+      initialState: {},
     );
   }
   
   /// Level 2: Multiple objects
   static TutorialSequence _createLevel2Tutorial() {
     return TutorialSequence(
-      levelId: 'level_2',
+      levelId: 'world1_level2',
       steps: [
         TutorialStep(
           id: 'multiple_objects',
@@ -98,7 +85,7 @@ class TutorialScripts {
   /// Level 3: Obstacles introduction
   static TutorialSequence _createLevel3Tutorial() {
     return TutorialSequence(
-      levelId: 'level_3',
+      levelId: 'world1_level3',
       steps: [
         TutorialStep(
           id: 'obstacles',
@@ -121,7 +108,7 @@ class TutorialScripts {
   /// Level 4: Special objects
   static TutorialSequence _createLevel4Tutorial() {
     return TutorialSequence(
-      levelId: 'level_4',
+      levelId: 'world1_level4',
       steps: [
         TutorialStep(
           id: 'heavy_object',
@@ -146,7 +133,7 @@ class TutorialScripts {
   /// Level 5: Time limit introduction
   static TutorialSequence _createLevel5Tutorial() {
     return TutorialSequence(
-      levelId: 'level_5',
+      levelId: 'world1_level5',
       steps: [
         TutorialStep(
           id: 'time_limit',

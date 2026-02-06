@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/world.dart';
 import '../../data/world1_levels.dart';
-import '../providers/level_providers.dart';
 import '../../../progress/progress_service.dart';
 import 'level_selection_screen.dart';
 
@@ -50,22 +49,13 @@ class _WorldSelectionScreenState extends ConsumerState<WorldSelectionScreen>
   }
   
   Future<void> _loadWorlds() async {
-    try {
-      final repository = ref.read(levelRepositoryProvider);
-      final worlds = await repository.loadAllWorlds();
-      setState(() {
-        _worlds = worlds;
-        _isLoading = false;
-      });
-      _carouselController.forward();
-    } catch (e) {
-      // For demo, create mock worlds
-      setState(() {
-        _worlds = _createMockWorlds();
-        _isLoading = false;
-      });
-      _carouselController.forward();
-    }
+    // Use built-in level data (World1Levels) directly
+    // The JSON-based repository only has 1 level file, so most levels would be missing
+    setState(() {
+      _worlds = _createMockWorlds();
+      _isLoading = false;
+    });
+    _carouselController.forward();
   }
   
   List<World> _createMockWorlds() {
@@ -237,13 +227,16 @@ class _WorldSelectionScreenState extends ConsumerState<WorldSelectionScreen>
                         icon: Icon(Icons.arrow_back, color: Colors.white),
                         onPressed: () => Navigator.pop(context),
                       ),
-                      Text(
-                        'SELECT WORLD',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 3,
+                      Flexible(
+                        child: Text(
+                          'SELECT WORLD',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 3,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Container(
@@ -407,28 +400,29 @@ class _WorldSelectionScreenState extends ConsumerState<WorldSelectionScreen>
                       color: Colors.black.withValues(alpha: 0.7),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             Icons.lock,
-                            size: 80,
+                            size: 40,
                             color: Colors.white54,
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(height: 8),
                           Text(
                             'LOCKED',
                             style: TextStyle(
                               color: Colors.white54,
-                              fontSize: 24,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 2,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          SizedBox(height: 4),
                           Text(
                             world.unlockRequirement.description,
                             style: TextStyle(
                               color: Colors.white38,
-                              fontSize: 14,
+                              fontSize: 12,
                             ),
                             textAlign: TextAlign.center,
                           ),
